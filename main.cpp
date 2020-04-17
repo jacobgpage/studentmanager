@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <map>
+#include <algorithm>
 #include "student.h"
 
 using namespace std;
 
-bool compareSudents ( const string s1, const string s2 ) {
+bool compareSudents ( pair< string, Student > s1, pair< string, Student > s2 ) {
 	
-	if ( s1 > s2 ) {
+	if ( s1.second.getLastName() > s2.second.getLastName() ) {
 		
 		return true;
 	
@@ -30,7 +31,6 @@ int main() {
 	
 	map< string, Student, DescendingOrder > studentsMap;
 	map< string, Student >::iterator studentIt;
-	map< string, Student >::iterator minName;
 	
 	for ( int i = 0; i < 10; i++ ) { //Reads data into the map
 		
@@ -46,30 +46,15 @@ int main() {
 	
 	cout << "Hello!" << endl << endl;
 	
-	studentIt = studentsMap.begin();
-	minName = studentIt;
-	
-	++studentIt;
-	
 	map< string, Student >::iterator end = studentsMap.end();
-
-	do { //Finds the min last name and prints it out
-
-		if ( compareSudents ( studentIt->second.getLastName(), minName->second.getLastName() ) ) {
-				
-			minName = studentIt;
-			
-		}
-		
-		++studentIt;
-		
-	} while ( studentIt != end );
+	
+	pair< string, Student > minName = *min_element( studentsMap.begin(), studentsMap.end(), compareSudents ); 
 	
 	cout << "Student with Min Lastname" << endl;
-	cout << "ID: " << minName->first << endl;
-	cout << "First: " << minName->second.getFirstName() << endl;
-	cout << "Last: " << minName->second.getLastName() << endl;
-	cout << "GPA: " << minName->second.getGPA() << endl;
+	cout << "ID: " << minName.first << endl;
+	cout << "First: " << minName.second.getFirstName() << endl;
+	cout << "Last: " << minName.second.getLastName() << endl;
+	cout << "GPA: " << minName.second.getGPA() << endl;
 	cout << endl;
 	
 	studentIt = studentsMap.begin();
